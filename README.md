@@ -13,10 +13,10 @@ Este repositorio genera y almacena los grandes hallazgos en relación al IIP 202
 
 ## Efectos Directos:
 1. Baja participación ciudadana para identificar soluciones a problemas públicos.
-![imagen](./files/graficos/1.%20Efectos%20Directos/a/Entidades_participativas.png)
-![imagen](./files/graficos/1.%20Efectos%20Directos/a/Volumen_iniciativas_vs_origen.png)
+> ![imagen](./files/graficos/1.%20Efectos%20Directos/a/Entidades_participativas.png)
+> ![imagen](./files/graficos/1.%20Efectos%20Directos/a/Volumen_iniciativas_vs_origen.png)
 2. Débil promoción en las entidades de una cultura de innovación entre su talento humano para afrontar desafíos públicos.
-![imagen](./files/graficos/1.%20Efectos%20Directos/b/Volumen_entidades_vs_unidades.png)
+> ![imagen](./files/graficos/1.%20Efectos%20Directos/b/Volumen_entidades_vs_unidades.png)
 
 ## Problema Cental:
 1. Baja confianza de la ciudadanía por desconeción de la gestión de gobierno con las expectativas ciudadanas.
@@ -27,10 +27,10 @@ Este repositorio genera y almacena los grandes hallazgos en relación al IIP 202
 
 ## Causas Indirectas:
 1. Carencia de espacios para la construcción colectiva con la ciudadanía.
-![imagen](./files/graficos/3.%20Causas%20Indirectas/a/Volumen_actividades_vs_orientación.png)
-![imagen](./files/graficos/3.%20Causas%20Indirectas/a/Volumen_canales_vs_orientación.png)
+> ![imagen](./files/graficos/3.%20Causas%20Indirectas/a/Volumen_actividades_vs_orientación.png)
+> ![imagen](./files/graficos/3.%20Causas%20Indirectas/a/Volumen_canales_vs_orientación.png)
 2. Brechas en la gestión del conocimiento y los empalmes contractuales.
-![imagen](./files/graficos/3.%20Causas%20Indirectas/b/Mecanismos_GCI.png)
+> ![imagen](./files/graficos/3.%20Causas%20Indirectas/b/Mecanismos_GCI.png)
 3. Ausencia de garantías para procesos de largo aliento.
-![imagen](./files/graficos/3.%20Causas%20Indirectas/c/general_vs_general_inno.png)
-![imagen](./files/graficos/3.%20Causas%20Indirectas/c/herramientas_vs_general_inno.png)
+> ![imagen](./files/graficos/3.%20Causas%20Indirectas/c/general_vs_general_inno.png)
+> ![imagen](./files/graficos/3.%20Causas%20Indirectas/c/herramientas_vs_general_inno.png)
