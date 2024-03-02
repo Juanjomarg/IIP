@@ -1,0 +1,20 @@
+version: '3.1'
+
+services:
+  joomla:
+    container_name: joomla
+    image: docker.io/library/joomla:latest
+    restart: always
+    depends_on: db
+    ports:
+      - 8081:80
+    environment:
+      JOOMLA_DB_HOST: joomladb
+      JOOMLA_DB_PASSWORD: example
+
+  db:
+    container_name: joomladb
+    image: docker.io/library/mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
