@@ -10,6 +10,7 @@ services:
       - 8081:80
     environment:
       JOOMLA_DB_HOST: joomladb
+#      JOOMLA_DB_USER: dbuser
       JOOMLA_DB_PASSWORD: example
 
   db:
