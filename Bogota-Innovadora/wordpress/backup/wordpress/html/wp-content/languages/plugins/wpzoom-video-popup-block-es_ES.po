@@ -1,0 +1,91 @@
+# Translation of Plugins - Video Popup Block by WPZOOM - Development (trunk) in Spanish (Spain)
+# This file is distributed under the same license as the Plugins - Video Popup Block by WPZOOM - Development (trunk) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2023-10-16 11:48:57+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.0-alpha.9\n"
+"Language: es\n"
+"Project-Id-Version: Plugins - Video Popup Block by WPZOOM - Development (trunk)\n"
+
+#. Description of the plugin
+msgid "Quickly add a button displaying a YouTube, Vimeo or Self-Hosted (MP4) video in a popup when clicked."
+msgstr "Añade rápidamente un botón que muestre un vídeo de YouTube, Vimeo o autoalojado (MP4) en una ventana emergente al hacer clic en él."
+
+#. Plugin URI of the plugin
+msgid "https://wordpress.org/plugins/wpzoom-video-popup-block/"
+msgstr "https://wordpress.org/plugins/wpzoom-video-popup-block/"
+
+#: block.json
+msgctxt "block keyword"
+msgid "customization"
+msgstr "personalización"
+
+#: block.json
+msgctxt "block keyword"
+msgid "click"
+msgstr "click"
+
+#: block.json
+msgctxt "block keyword"
+msgid "interactive"
+msgstr "interactivo"
+
+#: block.json
+msgctxt "block keyword"
+msgid "vimeo"
+msgstr "vimeo"
+
+#: block.json
+msgctxt "block keyword"
+msgid "youtube"
+msgstr "youtube"
+
+#: block.json
+msgctxt "block keyword"
+msgid "lightbox"
+msgstr "lightbox"
+
+#: block.json
+msgctxt "block keyword"
+msgid "wpzoom"
+msgstr "wpzoom"
+
+#: block.json
+msgctxt "block keyword"
+msgid "block"
+msgstr "bloque"
+
+#: block.json
+msgctxt "block keyword"
+msgid "popup"
+msgstr "ventana emergente"
+
+#: block.json
+msgctxt "block keyword"
+msgid "video"
+msgstr "vídeo"
+
+#: block.json
+msgctxt "block title"
+msgid "WPZOOM Video Popup Block"
+msgstr "Bloque de vídeo emergente de WPZOOM"
+
+#: wpzoom-video-popup-block.php:147
+msgid "WPZOOM - Blocks"
+msgstr "WPZOOM - Bloques"
+
+#. Author URI of the plugin
+msgid "https://www.wpzoom.com/"
+msgstr "https://www.wpzoom.com/"
+
+#. Author of the plugin
+msgid "WPZOOM"
+msgstr "WPZOOM"
+
+#. Plugin Name of the plugin
+msgid "Video Popup Block by WPZOOM"
+msgstr "Bloque de vídeo emergente de WPZOOM"
