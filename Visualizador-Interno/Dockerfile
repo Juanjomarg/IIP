@@ -1,5 +1,5 @@
 FROM python:3.9.19-bookworm
-COPY . /app/
+COPY ./app/ /app/
 WORKDIR /app
 RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 4284
