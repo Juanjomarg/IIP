@@ -1,6 +1,6 @@
-FROM python:3.9.5
-WORKDIR /app
+FROM python:3.9.19-bookworm
 COPY . /app/
+WORKDIR /app
 RUN pip install --no-cache-dir -r requirements.txt
-EXPOSE 8050
-CMD ["gunicorn", "--bind", "0.0.0.0:8050", "--log-level", "debug", "app:server"]
+EXPOSE 4284
+CMD ["gunicorn", "--bind", "0.0.0.0:4284", "--log-level", "debug", "app:server"]
