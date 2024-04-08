@@ -2,6 +2,11 @@ FROM python:3
 COPY ./app/ /app/
 WORKDIR /app
 
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y gunicorn \
+    && rm -rf /var/lib/apt/lists/*
+
 #RUN apt-get update \
 #    && apt-get upgrade -y \
 #    && apt-get install -y software-properties-common wget xz-utils build-essential zlib1g-dev gunicorn python3-pip libssl-dev \
