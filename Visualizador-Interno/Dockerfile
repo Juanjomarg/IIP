@@ -3,7 +3,6 @@ COPY ./app/ /app/
 WORKDIR /app
 
 RUN apt-get update \
-    && apt-get upgrade -y \
     && apt-get install -y gunicorn \
     && rm -rf /var/lib/apt/lists/*
 
