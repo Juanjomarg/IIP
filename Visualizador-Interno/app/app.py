@@ -14,7 +14,7 @@ import zipfile
 
 import dash
 import dash_bootstrap_components as dbc
-from dash import html,Input,Output,State,dcc,dash_table
+from dash import html,Input,Output,dcc
 
 import plotly.graph_objects as go
 
