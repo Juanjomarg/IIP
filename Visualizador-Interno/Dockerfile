@@ -5,12 +5,12 @@ RUN apt-get update && apt-get upgrade -y
 
 RUN apt-get install -y gunicorn
 
-RUN apt install software-properties-common wget
+RUN apt-get install -y software-properties-common wget
 RUN wget https://www.python.org/ftp/python/3.11.3/Python-3.11.3.tar.xz
 RUN tar -xf Python-3.11.1.tar.xz
 RUN cd Python-3.11.1
-RUN  ./configure --enable-optimizations
-RUN  make altinstall
+RUN ./configure --enable-optimizations
+RUN make altinstall
 
 RUN pip3 install -r requirements.txt
 EXPOSE 4284
