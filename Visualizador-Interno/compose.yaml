@@ -2,7 +2,7 @@ version: '3.7'
 services:
   dashboard:
     build: 
-      context: /app
+      context: /
     container_name: visualizador_iip_2023
     restart: always
     ports:
