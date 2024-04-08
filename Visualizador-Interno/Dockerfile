@@ -3,7 +3,7 @@ COPY ./app/ /app/
 WORKDIR /app
 RUN apt-get update \
     && apt-get upgrade -y \
-    && apt-get install -y software-properties-common wget xz-utils build-essential gunicorn \
+    && apt-get install -y software-properties-common wget xz-utils build-essential zlib1g-dev gunicorn \
     && rm -rf /var/lib/apt/lists/*
 
 RUN wget https://www.python.org/ftp/python/3.11.3/Python-3.11.3.tar.xz \
