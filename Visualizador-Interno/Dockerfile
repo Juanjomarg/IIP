@@ -1,10 +1,13 @@
-FROM python:3.9-slim
+FROM python:3.9-slim-buster
+RUN apt-get update
 
-COPY ./requirements.txt /requirements.txt
-RUN pip3 install -r /requirements.txt
+RUN mkdir /app
+WORKDIR /app
 
-WORKDIR /
-COPY ./app /
+COPY ./app/requirements.txt ./requirements.txt
+RUN pip3 install -r ./requirements.txt
+
+COPY ./app ./
 
 
 CMD [ "gunicorn", "--workers=5", "--threads=1", "-b 0.0.0.0:8080", "app:server"]
