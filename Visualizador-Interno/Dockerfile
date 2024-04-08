@@ -14,7 +14,9 @@ RUN wget https://www.python.org/ftp/python/3.11.3/Python-3.11.3.tar.xz \
     && make altinstall
 
 CMD ["python3.11", "--version"]
-RUN pip3 install -r requirements.txt
+
+RUN python3.11 -m venv venv
+RUN . venv/bin/activate && pip3 install -r requirements.txt
 
 EXPOSE 4284
 
