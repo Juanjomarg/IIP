@@ -6,7 +6,7 @@ services:
     container_name: visualizador_iip_2023
     restart: always
     ports:
-      - 4284:8080
+      - 4284:80
     networks:
       - network 
   
