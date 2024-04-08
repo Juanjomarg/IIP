@@ -3,7 +3,7 @@ services:
   dashboard:
     build: 
       context: /app
-    container_name: {COMPOSE_PROJECT_NAME}:{COMPOSE_PROJECT_NAME}_dashboard
+    container_name: visualizador_iip_2023
     restart: always
     ports:
       - 4284:8080
