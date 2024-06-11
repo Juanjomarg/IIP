@@ -287,11 +287,11 @@ layout = dbc.Container([
 ])
 
 ###############################################################################################################################################################################################################
-# CALLBACKS
+# @callbacks
 ###############################################################################################################################################################################################################
 
-#Callback guardar pregunta seleccionada
-callback(
+#@callback guardar pregunta seleccionada
+@callback(
     Output('pregunta_seleccionada', 'data'),
     Input('selector_pregunta', 'value')
 )
@@ -302,8 +302,8 @@ def seleccion_pregunta(value):
         salida = preguntas_df[preguntas_df["codigo 2023"] == "p1"]["codigo 2023"].tolist()[0]
     return salida
 
-#Callback ver respuestas
-callback(
+#@callback ver respuestas
+@callback(
     Output('pregunta', 'children'),
     Output('respuesta_2021', 'children'),
     Output('respuesta_2023', 'children'),
@@ -3209,8 +3209,8 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
 
     return pregunta,salida_respuesta_2021,salida_respuesta_2023
 
-#Callback nombre, misión y visión
-callback(
+#@callback nombre, misión y visión
+@callback(
     Output('nom_ent', 'children'),
     Output('mision', 'children'),
     Output('vision', 'children'),
@@ -3235,8 +3235,8 @@ def mision_vision_entidad_f(value):
 
     return nom_ent,mis_ent,vis_ent
 
-#Callback resumen 2021 lateral
-callback(
+#@callback resumen 2021 lateral
+@callback(
     Output('posicion_2021', 'children'),
     Output('st', 'label'),
     Output('sc1', 'label'),
@@ -3300,8 +3300,8 @@ def tabla_resumen_2021(entidad):
 
     return pos_2021,res_total,res_c1,res_c2,res_c3,res_c4,st,sc1,sc2,sc3,sc4
 
-#Callback resumen 2023 lateral
-callback(
+#@callback resumen 2023 lateral
+@callback(
     Output('posicion_2023', 'children'),
     Output('st_2023', 'label'),
     Output('sc1_2023', 'label'),

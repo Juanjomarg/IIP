@@ -104,7 +104,7 @@ app.layout = dbc.Container(
     ]
 )
 
-callback(
+@callback(
     Output('entidad_seleccionada', 'data'),
     Input('selector_entidad', 'value')
 )
