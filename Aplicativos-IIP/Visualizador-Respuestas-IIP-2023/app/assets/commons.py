@@ -1,4 +1,4 @@
-from assets.libraries import *
+import pandas as pd
 
 LOGO_LAB='./static/logolab.png'
 LOGO_IIP='./static/logoiip.png'

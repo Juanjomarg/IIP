@@ -1,7 +1,9 @@
-from assets.libraries import *
-from assets.commons import *
+from assets.commons import entidades_2023,ENTIDAD_INICIAL,LOGO_IIP,LOGO_LAB, respuestas_2023_df
 
-app = dash.Dash(
+import dash_bootstrap_components as dbc
+from dash import Dash, html, Input, Output, dcc, callback, page_container
+
+app = Dash(
     __name__,
     external_stylesheets=[dbc.themes.COSMO, dbc.icons.FONT_AWESOME],
     use_pages=True
@@ -95,20 +97,20 @@ app.layout = dbc.Container(
         sidebar,
         html.Div(
             [
-                dash.page_container
+                page_container
             ],
             className="content",
         ),
     ]
 )
 
-@dash.callback(
+callback(
     Output('entidad_seleccionada', 'data'),
     Input('selector_entidad', 'value')
 )
 def sel_entidad(value):
     
-    if value != None:
+    if value is not None:
         ent=list(respuestas_2023_df[respuestas_2023_df['entidad'] == value]['_uuid'])[0]
         #print(f'{value} -> {ent}\n')
         return ent

@@ -1,9 +1,30 @@
-from assets.libraries import *
-from assets.commons import *
-from assets.cards import *
-from assets.criteria import *
+import os
+import zipfile
+import statistics
 
-dash.register_page(__name__, path='/explorer')
+import itertools
+
+from assets.cards import card_p1_p2, card_p3_p4_p5_p6, card_p7_p8_p9_p10_p11_p12, card_p13
+from assets.cards import card_p14_15_16_19_20, card_p17_18_21_22, card_p23, card_p24, card_p25_p26, card_p27
+from assets.cards import card_p28, card_p29_p30
+from assets.cards import card_p31_p32, card_p33_p34_p35_p36_p37_p38, card_p39
+
+from assets.commons import p1_df, p2_df, p13_df
+from assets.commons import p14_df, p15_df, p16_df, p17_df, p18_df, p19_df, p20_df, p21_df, p22_df, p23_df, p24_1_df, p24_2_df, p24_3_df, p24_4_df, p24_5_df,p25_df, p26_df, p27_df
+from assets.commons import p28_df
+from assets.commons import p31_df, p32_df, p33_df, p34_df, p35_df, p36_df, p37_df, p38_df, p39_df
+from assets.commons import PREGUNTA_INICIAL, PREGUNTAS_TODAS, CRITS_PREGUNTAS_BASE
+from assets.commons import preguntas_df, respuestas_2021_df,respuestas_2023_df,resultados_2021_df,resultados_2023_df
+
+from assets.criteria import criterio_1, criterio_2, criterio_3, criterio_4, criterio_5, criterio_6, criterio_7, criterio_8, criterio_9, criterio_10
+from assets.criteria import criterio_11, criterio_12, criterio_13, criterio_14, criterio_15, criterio_16, criterio_17, criterio_18, criterio_19, criterio_20
+from assets.criteria import criterio_21, criterio_22, criterio_23, criterio_24, criterio_25, criterio_26, criterio_27, criterio_28, criterio_29, criterio_30
+from assets.criteria import criterio_31, criterio_32, criterio_33, criterio_34, criterio_35, criterio_36, criterio_37, criterio_38, criterio_39
+
+import dash_bootstrap_components as dbc
+from dash import html, Input, Output, dcc, register_page, callback
+
+register_page(__name__, path='/explorer')
 
 par_spacer='1rem'
 progress_thickness='.8rem'
@@ -203,7 +224,7 @@ layout = dbc.Container([
                         html.H3('Mision'),
                         html.P(id='mision',children=[])
                     ],                        
-                    style={'padding':f'0rem 2rem 0rem 0rem','text-justify':'auto','text-align': 'justify'}
+                    style={'padding':'0rem 2rem 0rem 0rem','text-justify':'auto','text-align': 'justify'}
                     ),
                 ]),
                 dbc.Col([
@@ -223,7 +244,7 @@ layout = dbc.Container([
                         html.H3('Pregunta'),
                         html.P(id='pregunta',children=[]),
                     ],                        
-                    style={'padding':f'0rem 2rem 0rem 0rem','text-justify':'auto','text-align': 'justify'}
+                    style={'padding':'0rem 2rem 0rem 0rem','text-justify':'auto','text-align': 'justify'}
                     ),
                 ]),
 
@@ -241,14 +262,14 @@ layout = dbc.Container([
             dbc.Row([
                 dbc.Col([
                     html.Div([
-                        html.H3(f'Respuesta 2023'),
+                        html.H3('Respuesta 2023'),
                         html.Div(id='respuesta_2023',children='',),
                     ]),
                 ]),
             ]),
         ],
         width=9,
-        style={'padding':f'0rem 1.5rem 0rem 0rem'}
+        style={'padding':'0rem 1.5rem 0rem 0rem'}
         ),
             
         #Tarjeta resumen 2021, zona de peligro, zona de descarga
@@ -270,19 +291,19 @@ layout = dbc.Container([
 ###############################################################################################################################################################################################################
 
 #Callback guardar pregunta seleccionada
-@dash.callback(
+callback(
     Output('pregunta_seleccionada', 'data'),
     Input('selector_pregunta', 'value')
 )
 def seleccion_pregunta(value):
-    if value != None:
+    if value is not None:
         salida=value
     else:
         salida = preguntas_df[preguntas_df["codigo 2023"] == "p1"]["codigo 2023"].tolist()[0]
     return salida
 
 #Callback ver respuestas
-@dash.callback(
+callback(
     Output('pregunta', 'children'),
     Output('respuesta_2021', 'children'),
     Output('respuesta_2023', 'children'),
@@ -310,7 +331,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         #respuesta 2021
         try:
             respuesta_2021 = respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][pregunta_seleccionada]
-            if respuesta_2021.empty ==False:
+            if not respuesta_2021.empty:
                 salida_respuesta_2021=respuesta_2021
             else:
                 salida_respuesta_2021 = 'N/A'
@@ -326,7 +347,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         #Respuesta 2023
         try:
             respuesta_2023 = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][pregunta_seleccionada]
-            if respuesta_2023.empty ==False:
+            if not respuesta_2021.empty:
                 salida_respuesta_2023=respuesta_2023
             else:
                 salida_respuesta_2023 = 'N/A'
@@ -360,11 +381,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -419,11 +440,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -468,18 +489,18 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
 
         try:
             costo_2019_2020 = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]
-        except Exception as e:
+        except Exception:
             costo_2019_2020 = 'N/A'
         
-        presupuesto_2021_dis = respuestas_2023_df[f'p3_val_1'].median()
-        presupuesto_2022_dis = respuestas_2023_df[f'p3_val_2'].median()
-        costo_2021_dis = respuestas_2023_df[f'p4_val_1'].median()
-        costo_2022_dis = respuestas_2023_df[f'p4_val_2'].median()
+        presupuesto_2021_dis = respuestas_2023_df['p3_val_1'].median()
+        presupuesto_2022_dis = respuestas_2023_df['p3_val_2'].median()
+        costo_2021_dis = respuestas_2023_df['p4_val_1'].median()
+        costo_2022_dis = respuestas_2023_df['p4_val_2'].median()
 
-        presupuesto_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p3_val_1']
-        presupuesto_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p3_val_2']
-        costo_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p4_val_1']
-        costo_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p4_val_2']
+        presupuesto_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p3_val_1']
+        presupuesto_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p3_val_2']
+        costo_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p4_val_1']
+        costo_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p4_val_2']
 
         soporte_2023 = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -540,18 +561,18 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
 
         try:
             costo_2019_2020 = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]
-        except Exception as e:
+        except Exception:
             costo_2019_2020 = 'N/A'
         
-        presupuesto_2021_dis = respuestas_2023_df[f'p3_val_1'].median()
-        presupuesto_2022_dis = respuestas_2023_df[f'p3_val_2'].median()
-        costo_2021_dis = respuestas_2023_df[f'p4_val_1'].median()
-        costo_2022_dis = respuestas_2023_df[f'p4_val_2'].median()
+        presupuesto_2021_dis = respuestas_2023_df['p3_val_1'].median()
+        presupuesto_2022_dis = respuestas_2023_df['p3_val_2'].median()
+        costo_2021_dis = respuestas_2023_df['p4_val_1'].median()
+        costo_2022_dis = respuestas_2023_df['p4_val_2'].median()
 
-        presupuesto_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p3_val_1']
-        presupuesto_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p3_val_2']
-        costo_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p4_val_1']
-        costo_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p4_val_2']
+        presupuesto_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p3_val_1']
+        presupuesto_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p3_val_2']
+        costo_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p4_val_1']
+        costo_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p4_val_2']
 
         soporte_2023 = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -612,18 +633,18 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
 
         try:
             costo_2019_2020 = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]
-        except Exception as e:
+        except Exception:
             costo_2019_2020 = 'N/A'
         
-        presupuesto_2021_dis = respuestas_2023_df[f'p5_val_1'].median()
-        presupuesto_2022_dis = respuestas_2023_df[f'p5_val_2'].median()
-        costo_2021_dis = respuestas_2023_df[f'p6_val_1'].median()
-        costo_2022_dis = respuestas_2023_df[f'p6_val_2'].median()
+        presupuesto_2021_dis = respuestas_2023_df['p5_val_1'].median()
+        presupuesto_2022_dis = respuestas_2023_df['p5_val_2'].median()
+        costo_2021_dis = respuestas_2023_df['p6_val_1'].median()
+        costo_2022_dis = respuestas_2023_df['p6_val_2'].median()
 
-        presupuesto_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p5_val_1']
-        presupuesto_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p5_val_2']
-        costo_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p6_val_1']
-        costo_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p6_val_2']
+        presupuesto_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p5_val_1']
+        presupuesto_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p5_val_2']
+        costo_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p6_val_1']
+        costo_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p6_val_2']
 
         soporte_2023 = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -684,18 +705,18 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
 
         try:
             costo_2019_2020 = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]
-        except Exception as e:
+        except Exception:
             costo_2019_2020 = 'N/A'
         
-        presupuesto_2021_dis = respuestas_2023_df[f'p5_val_1'].median()
-        presupuesto_2022_dis = respuestas_2023_df[f'p5_val_2'].median()
-        costo_2021_dis = respuestas_2023_df[f'p6_val_1'].median()
-        costo_2022_dis = respuestas_2023_df[f'p6_val_2'].median()
+        presupuesto_2021_dis = respuestas_2023_df['p5_val_1'].median()
+        presupuesto_2022_dis = respuestas_2023_df['p5_val_2'].median()
+        costo_2021_dis = respuestas_2023_df['p6_val_1'].median()
+        costo_2022_dis = respuestas_2023_df['p6_val_2'].median()
 
-        presupuesto_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p5_val_1']
-        presupuesto_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p5_val_2']
-        costo_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p6_val_1']
-        costo_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p6_val_2']
+        presupuesto_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p5_val_1']
+        presupuesto_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p5_val_2']
+        costo_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p6_val_1']
+        costo_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p6_val_2']
 
         soporte_2023 = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -756,22 +777,22 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
 
         try:
             funcionarios_ent = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]
-        except Exception as e:
+        except Exception:
             funcionarios_ent = 'N/A'
 
-        cantidad_2021_dis = respuestas_2023_df[f'p7_val_1'].median()
-        cantidad_2022_dis = respuestas_2023_df[f'p7_val_2'].median()
-        manual_2021_dis = respuestas_2023_df[f'p8_val_1'].median()
-        manual_2022_dis = respuestas_2023_df[f'p8_val_2'].median()
-        ocasionales_2021_dis = respuestas_2023_df[f'p9_val_1'].median()
-        ocasionales_2022_dis = respuestas_2023_df[f'p9_val_2'].median()
+        cantidad_2021_dis = respuestas_2023_df['p7_val_1'].median()
+        cantidad_2022_dis = respuestas_2023_df['p7_val_2'].median()
+        manual_2021_dis = respuestas_2023_df['p8_val_1'].median()
+        manual_2022_dis = respuestas_2023_df['p8_val_2'].median()
+        ocasionales_2021_dis = respuestas_2023_df['p9_val_1'].median()
+        ocasionales_2022_dis = respuestas_2023_df['p9_val_2'].median()
         
-        cantidad_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p7_val_1']
-        cantidad_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p7_val_2']
-        manual_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p8_val_1']
-        manual_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p8_val_2']
-        ocasionales_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p9_val_1']
-        ocasionales_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p9_val_2']
+        cantidad_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p7_val_1']
+        cantidad_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p7_val_2']
+        manual_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p8_val_1']
+        manual_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p8_val_2']
+        ocasionales_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p9_val_1']
+        ocasionales_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p9_val_2']
 
         soporte = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -840,22 +861,22 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
 
         try:
             funcionarios_ent = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]
-        except Exception as e:
+        except Exception:
             funcionarios_ent = 'N/A'
         
-        cantidad_2021_dis = respuestas_2023_df[f'p7_val_1'].median()
-        cantidad_2022_dis = respuestas_2023_df[f'p7_val_2'].median()
-        manual_2021_dis = respuestas_2023_df[f'p8_val_1'].median()
-        manual_2022_dis = respuestas_2023_df[f'p8_val_2'].median()
-        ocasionales_2021_dis = respuestas_2023_df[f'p9_val_1'].median()
-        ocasionales_2022_dis = respuestas_2023_df[f'p9_val_2'].median()
+        cantidad_2021_dis = respuestas_2023_df['p7_val_1'].median()
+        cantidad_2022_dis = respuestas_2023_df['p7_val_2'].median()
+        manual_2021_dis = respuestas_2023_df['p8_val_1'].median()
+        manual_2022_dis = respuestas_2023_df['p8_val_2'].median()
+        ocasionales_2021_dis = respuestas_2023_df['p9_val_1'].median()
+        ocasionales_2022_dis = respuestas_2023_df['p9_val_2'].median()
         
-        cantidad_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p7_val_1']
-        cantidad_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p7_val_2']
-        manual_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p8_val_1']
-        manual_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p8_val_2']
-        ocasionales_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p9_val_1']
-        ocasionales_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p9_val_2']
+        cantidad_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p7_val_1']
+        cantidad_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p7_val_2']
+        manual_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p8_val_1']
+        manual_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p8_val_2']
+        ocasionales_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p9_val_1']
+        ocasionales_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p9_val_2']
 
         soporte = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -923,23 +944,23 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
     elif pregunta_seleccionada=='p9':
 
         try:
-            funcionarios_ent = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'p8'])[0]
-        except Exception as e:
+            funcionarios_ent = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada]['p8'])[0]
+        except Exception:
             funcionarios_ent = 'N/A'
 
-        cantidad_2021_dis = respuestas_2023_df[f'p7_val_1'].median()
-        cantidad_2022_dis = respuestas_2023_df[f'p7_val_2'].median()
-        manual_2021_dis = respuestas_2023_df[f'p8_val_1'].median()
-        manual_2022_dis = respuestas_2023_df[f'p8_val_2'].median()
-        ocasionales_2021_dis = respuestas_2023_df[f'p9_val_1'].median()
-        ocasionales_2022_dis = respuestas_2023_df[f'p9_val_2'].median()
+        cantidad_2021_dis = respuestas_2023_df['p7_val_1'].median()
+        cantidad_2022_dis = respuestas_2023_df['p7_val_2'].median()
+        manual_2021_dis = respuestas_2023_df['p8_val_1'].median()
+        manual_2022_dis = respuestas_2023_df['p8_val_2'].median()
+        ocasionales_2021_dis = respuestas_2023_df['p9_val_1'].median()
+        ocasionales_2022_dis = respuestas_2023_df['p9_val_2'].median()
         
-        cantidad_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p7_val_1']
-        cantidad_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p7_val_2']
-        manual_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p8_val_1']
-        manual_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p8_val_2']
-        ocasionales_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p9_val_1']
-        ocasionales_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p9_val_2']
+        cantidad_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p7_val_1']
+        cantidad_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p7_val_2']
+        manual_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p8_val_1']
+        manual_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p8_val_2']
+        ocasionales_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p9_val_1']
+        ocasionales_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p9_val_2']
 
         soporte = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -1008,22 +1029,22 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         
         try:
             contratistas_ent = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]
-        except Exception as e:
+        except Exception:
             contratistas_ent = 'N/A'
         
-        cantidad_2021_dis = respuestas_2023_df[f'p10_val_1'].median()
-        cantidad_2022_dis = respuestas_2023_df[f'p10_val_2'].median()
-        manual_2021_dis = respuestas_2023_df[f'p11_val_1'].median()
-        manual_2022_dis = respuestas_2023_df[f'p11_val_2'].median()
-        ocasionales_2021_dis = respuestas_2023_df[f'p12_val_1'].median()
-        ocasionales_2022_dis = respuestas_2023_df[f'p12_val_2'].median()
+        cantidad_2021_dis = respuestas_2023_df['p10_val_1'].median()
+        cantidad_2022_dis = respuestas_2023_df['p10_val_2'].median()
+        manual_2021_dis = respuestas_2023_df['p11_val_1'].median()
+        manual_2022_dis = respuestas_2023_df['p11_val_2'].median()
+        ocasionales_2021_dis = respuestas_2023_df['p12_val_1'].median()
+        ocasionales_2022_dis = respuestas_2023_df['p12_val_2'].median()
         
-        cantidad_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p10_val_1']
-        cantidad_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p10_val_2']
-        manual_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p11_val_1']
-        manual_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p11_val_2']
-        ocasionales_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p12_val_1']
-        ocasionales_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p12_val_2']
+        cantidad_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p10_val_1']
+        cantidad_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p10_val_2']
+        manual_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p11_val_1']
+        manual_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p11_val_2']
+        ocasionales_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p12_val_1']
+        ocasionales_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p12_val_2']
 
         soporte = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -1092,22 +1113,22 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
 
         try:
             contratistas_ent = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]
-        except Exception as e:
+        except Exception:
             contratistas_ent = 'N/A'
         
-        cantidad_2021_dis = respuestas_2023_df[f'p10_val_1'].median()
-        cantidad_2022_dis = respuestas_2023_df[f'p10_val_2'].median()
-        manual_2021_dis = respuestas_2023_df[f'p11_val_1'].median()
-        manual_2022_dis = respuestas_2023_df[f'p11_val_2'].median()
-        ocasionales_2021_dis = respuestas_2023_df[f'p12_val_1'].median()
-        ocasionales_2022_dis = respuestas_2023_df[f'p12_val_2'].median()
+        cantidad_2021_dis = respuestas_2023_df['p10_val_1'].median()
+        cantidad_2022_dis = respuestas_2023_df['p10_val_2'].median()
+        manual_2021_dis = respuestas_2023_df['p11_val_1'].median()
+        manual_2022_dis = respuestas_2023_df['p11_val_2'].median()
+        ocasionales_2021_dis = respuestas_2023_df['p12_val_1'].median()
+        ocasionales_2022_dis = respuestas_2023_df['p12_val_2'].median()
         
-        cantidad_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p10_val_1']
-        cantidad_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p10_val_2']
-        manual_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p11_val_1']
-        manual_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p11_val_2']
-        ocasionales_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p12_val_1']
-        ocasionales_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p12_val_2']
+        cantidad_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p10_val_1']
+        cantidad_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p10_val_2']
+        manual_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p11_val_1']
+        manual_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p11_val_2']
+        ocasionales_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p12_val_1']
+        ocasionales_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p12_val_2']
 
         soporte = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -1175,23 +1196,23 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
     elif pregunta_seleccionada=='p12':
 
         try:
-            contratistas_ent = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'p11'])[0]
-        except Exception as e:
+            contratistas_ent = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada]['p11'])[0]
+        except Exception:
             contratistas_ent = 'N/A'
 
-        cantidad_2021_dis = respuestas_2023_df[f'p10_val_1'].median()
-        cantidad_2022_dis = respuestas_2023_df[f'p10_val_2'].median()
-        manual_2021_dis = respuestas_2023_df[f'p11_val_1'].median()
-        manual_2022_dis = respuestas_2023_df[f'p11_val_2'].median()
-        ocasionales_2021_dis = respuestas_2023_df[f'p12_val_1'].median()
-        ocasionales_2022_dis = respuestas_2023_df[f'p12_val_2'].median()
+        cantidad_2021_dis = respuestas_2023_df['p10_val_1'].median()
+        cantidad_2022_dis = respuestas_2023_df['p10_val_2'].median()
+        manual_2021_dis = respuestas_2023_df['p11_val_1'].median()
+        manual_2022_dis = respuestas_2023_df['p11_val_2'].median()
+        ocasionales_2021_dis = respuestas_2023_df['p12_val_1'].median()
+        ocasionales_2022_dis = respuestas_2023_df['p12_val_2'].median()
         
-        cantidad_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p10_val_1']
-        cantidad_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p10_val_2']
-        manual_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p11_val_1']
-        manual_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p11_val_2']
-        ocasionales_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p12_val_1']
-        ocasionales_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p12_val_2']
+        cantidad_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p10_val_1']
+        cantidad_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p10_val_2']
+        manual_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p11_val_1']
+        manual_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p11_val_2']
+        ocasionales_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p12_val_1']
+        ocasionales_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p12_val_2']
 
         soporte = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -1270,11 +1291,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -1333,10 +1354,10 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][pregunta_seleccionada])[0]
         except:
-            salida_respuesta_2021 = f'No registra iniciativas'
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -1406,11 +1427,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -1478,11 +1499,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -1545,10 +1566,10 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
-        if indices_carousel.empty == True:
+        if indices_carousel.empty:
             salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -1583,12 +1604,12 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         salida_max_2021=preguntas_df[preguntas_df['codigo 2023'] == pregunta_seleccionada]['nota maxima']
 
         try:
-            salida_respuesta_2021 = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'p17'])[0]
+            salida_respuesta_2021 = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada]['p17'])[0]
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
-        if indices_carousel.empty == True:
+        if indices_carousel.empty:
             salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -1631,11 +1652,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -1704,11 +1725,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -1771,10 +1792,10 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
-        if indices_carousel.empty == True:
+        if indices_carousel.empty:
             salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -1809,12 +1830,12 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         salida_max_2021=preguntas_df[preguntas_df['codigo 2023'] == pregunta_seleccionada]['nota maxima']
 
         try:
-            salida_respuesta_2021 = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'p21'])[0]
+            salida_respuesta_2021 = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada]['p21'])[0]
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
-        if indices_carousel.empty == True:
+        if indices_carousel.empty:
             salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -1856,11 +1877,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -1958,11 +1979,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
         except:
-            salida_respuesta_2021 = f'No registra iniciativas'
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
 
-            if p24_1_indices_carousel.empty == False:
+            if not p24_1_indices_carousel.empty:
                 cards1=[]
                 for i in range(len(p24_1_indices_carousel)):
                     
@@ -1981,7 +2002,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
                     dismissable=True,
                     is_open=True)]),html.Br()]
             
-            if p24_2_indices_carousel.empty == False:
+            if not p24_2_indices_carousel.empty:
                 cards2=[]
                 for i in range(len(p24_2_indices_carousel)):
                     
@@ -2000,7 +2021,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
                     dismissable=True,
                     is_open=True)]),html.Br()]
 
-            if p24_3_indices_carousel.empty == False:
+            if not p24_3_indices_carousel.empty:
                 cards3=[]
                 for i in range(len(p24_3_indices_carousel)):
                     
@@ -2019,7 +2040,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
                     dismissable=True,
                     is_open=True)]),html.Br()]
 
-            if p24_4_indices_carousel.empty == False:
+            if not p24_4_indices_carousel.empty:
                 cards4=[]
                 for i in range(len(p24_4_indices_carousel)):
                     
@@ -2038,7 +2059,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
                     dismissable=True,
                     is_open=True)]),html.Br()]
             
-            if p24_5_indices_carousel.empty == False:
+            if not p24_5_indices_carousel.empty:
                 cards5=[]
                 for i in range(len(p24_5_indices_carousel)):
                     
@@ -2101,10 +2122,10 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
         except:
-            salida_respuesta_2021 = f'No registra iniciativas'
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -2160,7 +2181,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
             salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -2214,11 +2235,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -2262,10 +2283,10 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
     elif pregunta_seleccionada=='p28':
 
         indices_carousel = p28_df[p28_df['_submission__uuid'] == entidad_seleccionada]['_index']
-        codigos_carousel = p28_df[p28_df['_submission__uuid'] == entidad_seleccionada][f'nom_inno']
+        codigos_carousel = p28_df[p28_df['_submission__uuid'] == entidad_seleccionada]['nom_inno']
         implementado_carousel = p28_df[p28_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_imp']
         validado_carousel = p28_df[p28_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_val']
-        metodologia_carousel = p28_df[p28_df['_submission__uuid'] == entidad_seleccionada][f'meto']
+        metodologia_carousel = p28_df[p28_df['_submission__uuid'] == entidad_seleccionada]['meto']
         beneficia_carousel = p28_df[p28_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_ben']
         ahorro_carousel = p28_df[p28_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_aho']
 
@@ -2275,11 +2296,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -2288,12 +2309,12 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
                 salida_criterios_entidad=[]
             else:
                 if list(beneficia_carousel)[0]=='Si':
-                    beneficiados_carousel = p28_df[p28_df['_submission__uuid'] == entidad_seleccionada][f'beneficiados']
+                    beneficiados_carousel = p28_df[p28_df['_submission__uuid'] == entidad_seleccionada]['beneficiados']
                 else:
                     beneficiados_carousel=['N/A' for x in range(len(indices_carousel)+1)]
                 
                 if list(ahorro_carousel)[0]=='Si':
-                    ahorrado_carousel = p28_df[p28_df['_submission__uuid'] == entidad_seleccionada][f'recursos_ahorrados']
+                    ahorrado_carousel = p28_df[p28_df['_submission__uuid'] == entidad_seleccionada]['recursos_ahorrados']
                 else:
                     ahorrado_carousel=['N/A' for x in range(len(indices_carousel)+1)]
                 cards=[]
@@ -2341,20 +2362,20 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
 
         try:
             form_2021 = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]
-        except Exception as e:
+        except Exception:
             form_2021 = 'N/A'
 
         salida_respuesta_2021=f"Funcionarios y contratistas formados: \n {form_2021}"
 
-        total_2021_dis = respuestas_2023_df[f'p7_val_1'].median()
-        total_2022_dis = respuestas_2023_df[f'p7_val_2'].median()
-        formados_2021_dis = respuestas_2023_df[f'p29_val_1'].median()
-        formados_2022_dis = respuestas_2023_df[f'p29_val_2'].median()
+        total_2021_dis = respuestas_2023_df['p7_val_1'].median()
+        total_2022_dis = respuestas_2023_df['p7_val_2'].median()
+        formados_2021_dis = respuestas_2023_df['p29_val_1'].median()
+        formados_2022_dis = respuestas_2023_df['p29_val_2'].median()
         
-        total_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p7_val_1']
-        total_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p7_val_2']
-        formados_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p29_val_1']
-        formados_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p29_val_2']
+        total_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p7_val_1']
+        total_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p7_val_2']
+        formados_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p29_val_1']
+        formados_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p29_val_2']
 
         cards=[]
         tipo_pregunta=['Funcionarios', 'Contratistas']
@@ -2409,20 +2430,20 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
 
         try:
             form_2021 = list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]
-        except Exception as e:
+        except Exception:
             form_2021 = 'N/A'
 
         salida_respuesta_2021=f"Funcionarios y contratistas formados: \n {form_2021}"
 
-        total_2021_dis = respuestas_2023_df[f'p10_val_1'].median()
-        total_2022_dis = respuestas_2023_df[f'p10_val_2'].median()
-        formados_2021_dis = respuestas_2023_df[f'p30_val_1'].median()
-        formados_2022_dis = respuestas_2023_df[f'p30_val_2'].median()
+        total_2021_dis = respuestas_2023_df['p10_val_1'].median()
+        total_2022_dis = respuestas_2023_df['p10_val_2'].median()
+        formados_2021_dis = respuestas_2023_df['p30_val_1'].median()
+        formados_2022_dis = respuestas_2023_df['p30_val_2'].median()
         
-        total_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p10_val_1']
-        total_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p10_val_2']
-        formados_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p30_val_1']
-        formados_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada][f'p30_val_2']
+        total_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p10_val_1']
+        total_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p10_val_2']
+        formados_2021_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p30_val_1']
+        formados_2022_ent = respuestas_2023_df[respuestas_2023_df['_uuid'] == entidad_seleccionada]['p30_val_2']
 
         cards=[]
         tipo_pregunta=['Funcionarios', 'Contratistas']
@@ -2472,7 +2493,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         
     elif pregunta_seleccionada=='p31':
 
-        indices_carousel = p31_df[p31_df['_submission__uuid'] == entidad_seleccionada][f'_index']
+        indices_carousel = p31_df[p31_df['_submission__uuid'] == entidad_seleccionada]['_index']
         codigos_carousel = p31_df[p31_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_cod']
         nombres_carousel = p31_df[p31_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_nom']
         descripciones_carousel = p31_df[p31_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_des']
@@ -2484,11 +2505,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -2532,7 +2553,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         
     elif pregunta_seleccionada=='p32':
 
-        indices_carousel = p32_df[p32_df['_submission__uuid'] == entidad_seleccionada][f'_index']
+        indices_carousel = p32_df[p32_df['_submission__uuid'] == entidad_seleccionada]['_index']
         codigos_carousel = p32_df[p32_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_cod']
         nombres_carousel = p32_df[p32_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_nom']
         descripciones_carousel = p32_df[p32_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_des']
@@ -2544,11 +2565,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -2592,7 +2613,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         
     elif pregunta_seleccionada=='p33':
 
-        indices_carousel = p33_df[p33_df['_submission__uuid'] == entidad_seleccionada][f'_index']
+        indices_carousel = p33_df[p33_df['_submission__uuid'] == entidad_seleccionada]['_index']
         codigos_carousel = p33_df[p33_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_cod']
         soportes_carousel = p33_df[p33_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -2602,11 +2623,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -2648,7 +2669,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         
     elif pregunta_seleccionada=='p34':
 
-        indices_carousel = p34_df[p34_df['_submission__uuid'] == entidad_seleccionada][f'_index']
+        indices_carousel = p34_df[p34_df['_submission__uuid'] == entidad_seleccionada]['_index']
         codigos_carousel = p34_df[p34_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_cod']
         soportes_carousel = p34_df[p34_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -2658,11 +2679,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -2704,7 +2725,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         
     elif pregunta_seleccionada=='p35':
 
-        indices_carousel = p35_df[p35_df['_submission__uuid'] == entidad_seleccionada][f'_index']
+        indices_carousel = p35_df[p35_df['_submission__uuid'] == entidad_seleccionada]['_index']
         codigos_carousel = p35_df[p35_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_cod']
         soportes_carousel = p35_df[p35_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -2714,11 +2735,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -2760,7 +2781,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         
     elif pregunta_seleccionada=='p36':
 
-        indices_carousel = p36_df[p36_df['_submission__uuid'] == entidad_seleccionada][f'_index']
+        indices_carousel = p36_df[p36_df['_submission__uuid'] == entidad_seleccionada]['_index']
         codigos_carousel = p36_df[p36_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_cod']
         soportes_carousel = p36_df[p36_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -2770,11 +2791,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -2816,7 +2837,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         
     elif pregunta_seleccionada=='p37':
 
-        indices_carousel = p37_df[p37_df['_submission__uuid'] == entidad_seleccionada][f'_index']
+        indices_carousel = p37_df[p37_df['_submission__uuid'] == entidad_seleccionada]['_index']
         codigos_carousel = p37_df[p37_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_cod']
         soportes_carousel = p37_df[p37_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -2826,11 +2847,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -2872,7 +2893,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         
     elif pregunta_seleccionada=='p38':
 
-        indices_carousel = p38_df[p38_df['_submission__uuid'] == entidad_seleccionada][f'_index']
+        indices_carousel = p38_df[p38_df['_submission__uuid'] == entidad_seleccionada]['_index']
         codigos_carousel = p38_df[p38_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_cod']
         soportes_carousel = p38_df[p38_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -2882,11 +2903,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -2928,7 +2949,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         
     elif pregunta_seleccionada=='p39':
 
-        indices_carousel = p39_df[p39_df['_submission__uuid'] == entidad_seleccionada][f'_index']
+        indices_carousel = p39_df[p39_df['_submission__uuid'] == entidad_seleccionada]['_index']
         codigos_carousel = p39_df[p39_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_cod']
         soportes_carousel = p39_df[p39_df['_submission__uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}_sop']
 
@@ -2938,11 +2959,11 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
         try:
             salida_respuesta_2021 = f"""{list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'{pregunta_seleccionada}'])[0]}\n a través de: {list(respuestas_2021_df[respuestas_2021_df['_uuid'] == entidad_seleccionada][f'r_{pregunta_seleccionada}'])[0]}"""
 
-        except Exception as e:
-            salida_respuesta_2021 = f'No registra iniciativas'
+        except Exception:
+            salida_respuesta_2021 = 'No registra iniciativas'
 
         if list(respuesta_2023)[0] == 'Si':
-            if indices_carousel.empty == True:
+            if indices_carousel.empty:
                 salida_respuesta_2023 = html.Div([dbc.Alert(
                     children='Esta entidad no tiene iniciativas',
                     color="warning",
@@ -3189,7 +3210,7 @@ def visualizacion_respuestas(entidad_seleccionada,pregunta_seleccionada):
     return pregunta,salida_respuesta_2021,salida_respuesta_2023
 
 #Callback nombre, misión y visión
-@dash.callback(
+callback(
     Output('nom_ent', 'children'),
     Output('mision', 'children'),
     Output('vision', 'children'),
@@ -3202,12 +3223,12 @@ def mision_vision_entidad_f(value):
     mis = respuestas_2023_df[respuestas_2023_df['_uuid'] == value]['mision']
     vis = respuestas_2023_df[respuestas_2023_df['_uuid'] == value]['vision']
 
-    if mis.empty ==False:
+    if not mis.empty:
         mis_ent=mis
     else:
         mis_ent = 'N/A'
 
-    if vis.empty ==False:
+    if not vis.empty:
         vis_ent=vis
     else:
         vis_ent = 'N/A'
@@ -3215,7 +3236,7 @@ def mision_vision_entidad_f(value):
     return nom_ent,mis_ent,vis_ent
 
 #Callback resumen 2021 lateral
-@dash.callback(
+callback(
     Output('posicion_2021', 'children'),
     Output('st', 'label'),
     Output('sc1', 'label'),
@@ -3232,13 +3253,13 @@ def mision_vision_entidad_f(value):
 def tabla_resumen_2021(entidad):
     
     pos = resultados_2021_df[resultados_2021_df['_uuid'] == entidad]['pos']
-    if pos.empty == False:
+    if not pos.empty:
         pos_2021 = pos
     else:
         pos_2021 = 'N/A'
 
     total = resultados_2021_df[resultados_2021_df['_uuid'] == entidad]['total'].round(2)
-    if total.empty == False:
+    if not total.empty:
         res_total  = total
         st = total
     else:
@@ -3246,7 +3267,7 @@ def tabla_resumen_2021(entidad):
         st = 0
 
     c1 = resultados_2021_df[resultados_2021_df['_uuid'] == entidad]['res_c1'].round(2)
-    if c1.empty == False:
+    if not c1.empty:
         res_c1 = c1
         sc1 = c1
     else:
@@ -3254,7 +3275,7 @@ def tabla_resumen_2021(entidad):
         sc1 = 0
 
     c2 = resultados_2021_df[resultados_2021_df['_uuid'] == entidad]['res_c2'].round(2)
-    if c2.empty == False:
+    if not c2.empty:
         res_c2 = c2
         sc2 = c2
     else:
@@ -3262,7 +3283,7 @@ def tabla_resumen_2021(entidad):
         sc2 = 0
 
     c3 = resultados_2021_df[resultados_2021_df['_uuid'] == entidad]['res_c3'].round(2)
-    if c3.empty == False:
+    if not c3.empty:
         res_c3 = c3
         sc3 = c3
     else:
@@ -3270,7 +3291,7 @@ def tabla_resumen_2021(entidad):
         sc3 = 0
 
     c4 = resultados_2021_df[resultados_2021_df['_uuid'] == entidad]['res_c4'].round(2)
-    if c4.empty == False:
+    if not c4.empty:
         res_c4 = c4
         sc4 = c4
     else:
@@ -3280,7 +3301,7 @@ def tabla_resumen_2021(entidad):
     return pos_2021,res_total,res_c1,res_c2,res_c3,res_c4,st,sc1,sc2,sc3,sc4
 
 #Callback resumen 2023 lateral
-@dash.callback(
+callback(
     Output('posicion_2023', 'children'),
     Output('st_2023', 'label'),
     Output('sc1_2023', 'label'),
@@ -3295,7 +3316,6 @@ def tabla_resumen_2021(entidad):
     Input('entidad_seleccionada', 'data'),
 )
 def tabla_resumen_2023(entidad_seleccionada):
-    resultados_2023_df=pd.read_excel('./files/resultados/2023/resultados_2023.xlsx')
 
     total = round(resultados_2023_df.loc[resultados_2023_df['_uuid']==entidad_seleccionada,'total'],2)
     c1 = round(resultados_2023_df.loc[resultados_2023_df['_uuid']==entidad_seleccionada,'res_c1']*100/25,2)
@@ -3322,7 +3342,7 @@ def tabla_resumen_2023(entidad_seleccionada):
 
     return pos_2021,res_total,res_c1,res_c2,res_c3,res_c4,st,sc1,sc2,sc3,sc4
 
-    path =f'./files/separadas/'
+    path ='./files/separadas/'
     loczip ='./files/exports/bucles.zip'
 
     zf = zipfile.ZipFile(loczip, "w")

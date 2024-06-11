@@ -1,4 +1,5 @@
-from assets.libraries import *
+import dash_bootstrap_components as dbc
+from dash import html
 
 def criterio_1():
     salida_criterio=html.Div(children=[
@@ -26,7 +27,7 @@ def criterio_1():
                             ]),
                             html.Tr([
                                 html.Td(0),
-                                html.Td(f'''N/A'''),
+                                html.Td('''N/A'''),
                             ]),
                         ])
                     ],
@@ -65,15 +66,15 @@ def criterio_2():
                     html.Tr([
                         html.Td(1.6,rowSpan=3),
                         html.Td(1.6),
-                        html.Td(f'''Criterio 1: Relevancia estratégica'''),
+                        html.Td('''Criterio 1: Relevancia estratégica'''),
                     ]),
                     html.Tr([
                         html.Td(1.6),
-                        html.Td(f'''Criterio 2: Impacto potencial'''),
+                        html.Td('''Criterio 2: Impacto potencial'''),
                     ]),
                     html.Tr([
                         html.Td(1.6),
-                        html.Td(f'''Criterio 3: Nivel de novedad'''),
+                        html.Td('''Criterio 3: Nivel de novedad'''),
                     ]),
                 ])
             ],
@@ -170,7 +171,7 @@ def criterio_3():
                             ]),
                             html.Tr([
                                 html.Td(0),
-                                html.Td(f'''N/A'''),
+                                html.Td('''N/A'''),
                             ]),
                         ])
                     ],
@@ -202,39 +203,39 @@ def criterio_4():
                     ]),
                     html.Tr([
                         html.Td(1.5,rowSpan=3),
-                        html.Td(f'Comparativa contra mediana del Distrito',rowSpan=3),
+                        html.Td('Comparativa contra mediana del Distrito',rowSpan=3),
                         html.Td(1.5),
-                        html.Td(f'Si es mayor a promedio distrital'),
+                        html.Td('Si es mayor a promedio distrital'),
                     ]),
                     html.Tr([
                         html.Td(.75),
-                        html.Td(f'Si es menor a promedio distrital'),
+                        html.Td('Si es menor a promedio distrital'),
                     ]),
                     html.Tr([
                         html.Td(0),
-                        html.Td(f'Si no tiene valor'),
+                        html.Td('Si no tiene valor'),
                     ]),
                     html.Tr([
                         html.Td(2.5,rowSpan=5),
-                        html.Td(f'Categoría en la que entra',rowSpan=5),
+                        html.Td('Categoría en la que entra',rowSpan=5),
                         html.Td(2.5),
-                        html.Td(f'3% en adelante'),
+                        html.Td('3% en adelante'),
                     ]),
                     html.Tr([
                         html.Td(1.8),
-                        html.Td(f'1-3%'),
+                        html.Td('1-3%'),
                     ]),
                     html.Tr([
                         html.Td(1.4),
-                        html.Td(f'0.5-1%'),
+                        html.Td('0.5-1%'),
                     ]),
                     html.Tr([
                         html.Td(1.1),
-                        html.Td(f'0.2-0.5%'),
+                        html.Td('0.2-0.5%'),
                     ]),
                     html.Tr([
                         html.Td(0.8),
-                        html.Td(f'0-0.2%'),
+                        html.Td('0-0.2%'),
                     ]),
                 ])
             ],
@@ -273,7 +274,7 @@ def criterio_5():
                             ]),
                             html.Tr([
                                 html.Td(0),
-                                html.Td(f'''N/A'''),
+                                html.Td('''N/A'''),
                             ]),
                         ])
                     ],
@@ -305,39 +306,39 @@ def criterio_6():
                     ]),
                     html.Tr([
                         html.Td(1.35,rowSpan=3),
-                        html.Td(f'Comparativa contra mediana del Distrito',rowSpan=3),
+                        html.Td('Comparativa contra mediana del Distrito',rowSpan=3),
                         html.Td(1.35),
-                        html.Td(f'Si es mayor a promedio distrital'),
+                        html.Td('Si es mayor a promedio distrital'),
                     ]),
                     html.Tr([
                         html.Td(.6),
-                        html.Td(f'Si es menor a promedio distrital'),
+                        html.Td('Si es menor a promedio distrital'),
                     ]),
                     html.Tr([
                         html.Td(0),
-                        html.Td(f'Si no tiene valor'),
+                        html.Td('Si no tiene valor'),
                     ]),
                     html.Tr([
                         html.Td(2.35,rowSpan=5),
-                        html.Td(f'Categoría en la que entra',rowSpan=5),
+                        html.Td('Categoría en la que entra',rowSpan=5),
                         html.Td(2.35),
-                        html.Td(f'3% en adelante'),
+                        html.Td('3% en adelante'),
                     ]),
                     html.Tr([
                         html.Td(1.7),
-                        html.Td(f'1-3%'),
+                        html.Td('1-3%'),
                     ]),
                     html.Tr([
                         html.Td(1.3),
-                        html.Td(f'0.5-1%'),
+                        html.Td('0.5-1%'),
                     ]),
                     html.Tr([
                         html.Td(1),
-                        html.Td(f'0.2-0.5%'),
+                        html.Td('0.2-0.5%'),
                     ]),
                     html.Tr([
                         html.Td(0.7),
-                        html.Td(f'0-0.2%'),
+                        html.Td('0-0.2%'),
                     ]),
                 ])
             ],
@@ -376,7 +377,7 @@ def criterio_7():
                             ]),
                             html.Tr([
                                 html.Td(0),
-                                html.Td(f'''N/A'''),
+                                html.Td('''N/A'''),
                             ]),
                         ])
                     ],
@@ -484,7 +485,7 @@ def criterio_9():
                             ]),
                             html.Tr([
                                 html.Td(0),
-                                html.Td(f'''N/A'''),
+                                html.Td('''N/A'''),
                             ]),
                         ])
                     ],
@@ -522,7 +523,7 @@ def criterio_10():
                             ]),
                             html.Tr([
                                 html.Td(0),
-                                html.Td(f'''N/A'''),
+                                html.Td('''N/A'''),
                             ]),
                         ])
                     ],
@@ -630,7 +631,7 @@ def criterio_12():
                             ]),
                             html.Tr([
                                 html.Td(0),
-                                html.Td(f'''N/A'''),
+                                html.Td('''N/A'''),
                             ]),
                         ])
                     ],
@@ -1845,17 +1846,17 @@ def criterio_29():
                     ]),
                     html.Tr([
                         html.Td(2.2,rowSpan=3),
-                        html.Td(f'Comparativa contra mediana del Distrito',rowSpan=3),
+                        html.Td('Comparativa contra mediana del Distrito',rowSpan=3),
                         html.Td(2.2),
-                        html.Td(f'Si es mayor a promedio distrital'),
+                        html.Td('Si es mayor a promedio distrital'),
                     ]),
                     html.Tr([
                         html.Td(1.1),
-                        html.Td(f'Si es menor a promedio distrital'),
+                        html.Td('Si es menor a promedio distrital'),
                     ]),
                     html.Tr([
                         html.Td(0),
-                        html.Td(f'Si no tiene valor'),
+                        html.Td('Si no tiene valor'),
                     ]),
                 ])
             ],
@@ -1888,17 +1889,17 @@ def criterio_30():
                     ]),
                     html.Tr([
                         html.Td(2.3,rowSpan=3),
-                        html.Td(f'Comparativa contra mediana del Distrito',rowSpan=3),
+                        html.Td('Comparativa contra mediana del Distrito',rowSpan=3),
                         html.Td(2.3),
-                        html.Td(f'Si es mayor a promedio distrital'),
+                        html.Td('Si es mayor a promedio distrital'),
                     ]),
                     html.Tr([
                         html.Td(1.1),
-                        html.Td(f'Si es menor a promedio distrital'),
+                        html.Td('Si es menor a promedio distrital'),
                     ]),
                     html.Tr([
                         html.Td(0),
-                        html.Td(f'Si no tiene valor'),
+                        html.Td('Si no tiene valor'),
                     ]),
                 ])
             ],
@@ -1937,7 +1938,7 @@ def criterio_31():
                             ]),
                             html.Tr([
                                 html.Td(0),
-                                html.Td(f'''N/A'''),
+                                html.Td('''N/A'''),
                             ]),
                         ])
                     ],
@@ -1967,51 +1968,51 @@ def criterio_32():
                     html.Tr([
                         html.Td(3,rowSpan=12),
                         html.Td(1.5,rowSpan=6),
-                        html.Td(f'Cantidad',rowSpan=6),
+                        html.Td('Cantidad',rowSpan=6),
                     ]),
                     html.Tr([
                         html.Td(1.5),
-                        html.Td(f'5 o mas Iniciativas'),
+                        html.Td('5 o mas Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(1.2),
-                        html.Td(f'4 Iniciativas'),
+                        html.Td('4 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.9),
-                        html.Td(f'3 Iniciativas'),
+                        html.Td('3 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.6),
-                        html.Td(f'2 Iniciativas'),
+                        html.Td('2 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.3),
-                        html.Td(f'1 Iniciativas'),
+                        html.Td('1 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(1.5,rowSpan=6),
-                        html.Td(f'Calidad',rowSpan=6),
+                        html.Td('Calidad',rowSpan=6),
                     ]),
                     html.Tr([
                         html.Td(1.5),
-                        html.Td(f'Alta'),
+                        html.Td('Alta'),
                     ]),
                     html.Tr([
                         html.Td(1.2),
-                        html.Td(f'Media alta'),
+                        html.Td('Media alta'),
                     ]),
                     html.Tr([
                         html.Td(.9),
-                        html.Td(f'Media'),
+                        html.Td('Media'),
                     ]),
                     html.Tr([
                         html.Td(.6),
-                        html.Td(f'Media baja'),
+                        html.Td('Media baja'),
                     ]),
                     html.Tr([
                         html.Td(.3),
-                        html.Td(f'Baja'),
+                        html.Td('Baja'),
                     ]),
 
 
@@ -2044,51 +2045,51 @@ def criterio_33():
                     html.Tr([
                         html.Td(1,rowSpan=12),
                         html.Td(.5,rowSpan=6),
-                        html.Td(f'Cantidad',rowSpan=6),
+                        html.Td('Cantidad',rowSpan=6),
                     ]),
                     html.Tr([
                         html.Td(.5),
-                        html.Td(f'5 o mas Iniciativas'),
+                        html.Td('5 o mas Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.4),
-                        html.Td(f'4 Iniciativas'),
+                        html.Td('4 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.3),
-                        html.Td(f'3 Iniciativas'),
+                        html.Td('3 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.2),
-                        html.Td(f'2 Iniciativas'),
+                        html.Td('2 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.1),
-                        html.Td(f'1 Iniciativas'),
+                        html.Td('1 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.5,rowSpan=6),
-                        html.Td(f'Calidad',rowSpan=6),
+                        html.Td('Calidad',rowSpan=6),
                     ]),
                     html.Tr([
                         html.Td(.5),
-                        html.Td(f'Alta'),
+                        html.Td('Alta'),
                     ]),
                     html.Tr([
                         html.Td(.4),
-                        html.Td(f'Media alta'),
+                        html.Td('Media alta'),
                     ]),
                     html.Tr([
                         html.Td(.3),
-                        html.Td(f'Media'),
+                        html.Td('Media'),
                     ]),
                     html.Tr([
                         html.Td(.2),
-                        html.Td(f'Media baja'),
+                        html.Td('Media baja'),
                     ]),
                     html.Tr([
                         html.Td(.1),
-                        html.Td(f'Baja'),
+                        html.Td('Baja'),
                     ]),
 
 
@@ -2121,51 +2122,51 @@ def criterio_34():
                     html.Tr([
                         html.Td(1,rowSpan=12),
                         html.Td(.5,rowSpan=6),
-                        html.Td(f'Cantidad',rowSpan=6),
+                        html.Td('Cantidad',rowSpan=6),
                     ]),
                     html.Tr([
                         html.Td(.5),
-                        html.Td(f'5 o mas Iniciativas'),
+                        html.Td('5 o mas Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.4),
-                        html.Td(f'4 Iniciativas'),
+                        html.Td('4 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.3),
-                        html.Td(f'3 Iniciativas'),
+                        html.Td('3 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.2),
-                        html.Td(f'2 Iniciativas'),
+                        html.Td('2 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.1),
-                        html.Td(f'1 Iniciativas'),
+                        html.Td('1 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.5,rowSpan=6),
-                        html.Td(f'Calidad',rowSpan=6),
+                        html.Td('Calidad',rowSpan=6),
                     ]),
                     html.Tr([
                         html.Td(.5),
-                        html.Td(f'Alta'),
+                        html.Td('Alta'),
                     ]),
                     html.Tr([
                         html.Td(.4),
-                        html.Td(f'Media alta'),
+                        html.Td('Media alta'),
                     ]),
                     html.Tr([
                         html.Td(.3),
-                        html.Td(f'Media'),
+                        html.Td('Media'),
                     ]),
                     html.Tr([
                         html.Td(.2),
-                        html.Td(f'Media baja'),
+                        html.Td('Media baja'),
                     ]),
                     html.Tr([
                         html.Td(.1),
-                        html.Td(f'Baja'),
+                        html.Td('Baja'),
                     ]),
 
 
@@ -2198,51 +2199,51 @@ def criterio_35():
                     html.Tr([
                         html.Td(1,rowSpan=12),
                         html.Td(.5,rowSpan=6),
-                        html.Td(f'Cantidad',rowSpan=6),
+                        html.Td('Cantidad',rowSpan=6),
                     ]),
                     html.Tr([
                         html.Td(.5),
-                        html.Td(f'5 o mas Iniciativas'),
+                        html.Td('5 o mas Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.4),
-                        html.Td(f'4 Iniciativas'),
+                        html.Td('4 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.3),
-                        html.Td(f'3 Iniciativas'),
+                        html.Td('3 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.2),
-                        html.Td(f'2 Iniciativas'),
+                        html.Td('2 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.1),
-                        html.Td(f'1 Iniciativas'),
+                        html.Td('1 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.5,rowSpan=6),
-                        html.Td(f'Calidad',rowSpan=6),
+                        html.Td('Calidad',rowSpan=6),
                     ]),
                     html.Tr([
                         html.Td(.5),
-                        html.Td(f'Alta'),
+                        html.Td('Alta'),
                     ]),
                     html.Tr([
                         html.Td(.4),
-                        html.Td(f'Media alta'),
+                        html.Td('Media alta'),
                     ]),
                     html.Tr([
                         html.Td(.3),
-                        html.Td(f'Media'),
+                        html.Td('Media'),
                     ]),
                     html.Tr([
                         html.Td(.2),
-                        html.Td(f'Media baja'),
+                        html.Td('Media baja'),
                     ]),
                     html.Tr([
                         html.Td(.1),
-                        html.Td(f'Baja'),
+                        html.Td('Baja'),
                     ]),
 
 
@@ -2275,51 +2276,51 @@ def criterio_36():
                     html.Tr([
                         html.Td(1,rowSpan=12),
                         html.Td(.5,rowSpan=6),
-                        html.Td(f'Cantidad',rowSpan=6),
+                        html.Td('Cantidad',rowSpan=6),
                     ]),
                     html.Tr([
                         html.Td(.5),
-                        html.Td(f'5 o mas Iniciativas'),
+                        html.Td('5 o mas Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.4),
-                        html.Td(f'4 Iniciativas'),
+                        html.Td('4 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.3),
-                        html.Td(f'3 Iniciativas'),
+                        html.Td('3 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.2),
-                        html.Td(f'2 Iniciativas'),
+                        html.Td('2 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.1),
-                        html.Td(f'1 Iniciativas'),
+                        html.Td('1 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.5,rowSpan=6),
-                        html.Td(f'Calidad',rowSpan=6),
+                        html.Td('Calidad',rowSpan=6),
                     ]),
                     html.Tr([
                         html.Td(.5),
-                        html.Td(f'Alta'),
+                        html.Td('Alta'),
                     ]),
                     html.Tr([
                         html.Td(.4),
-                        html.Td(f'Media alta'),
+                        html.Td('Media alta'),
                     ]),
                     html.Tr([
                         html.Td(.3),
-                        html.Td(f'Media'),
+                        html.Td('Media'),
                     ]),
                     html.Tr([
                         html.Td(.2),
-                        html.Td(f'Media baja'),
+                        html.Td('Media baja'),
                     ]),
                     html.Tr([
                         html.Td(.1),
-                        html.Td(f'Baja'),
+                        html.Td('Baja'),
                     ]),
 
 
@@ -2352,51 +2353,51 @@ def criterio_37():
                     html.Tr([
                         html.Td(1,rowSpan=12),
                         html.Td(.5,rowSpan=6),
-                        html.Td(f'Cantidad',rowSpan=6),
+                        html.Td('Cantidad',rowSpan=6),
                     ]),
                     html.Tr([
                         html.Td(.5),
-                        html.Td(f'5 o mas Iniciativas'),
+                        html.Td('5 o mas Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.4),
-                        html.Td(f'4 Iniciativas'),
+                        html.Td('4 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.3),
-                        html.Td(f'3 Iniciativas'),
+                        html.Td('3 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.2),
-                        html.Td(f'2 Iniciativas'),
+                        html.Td('2 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.1),
-                        html.Td(f'1 Iniciativas'),
+                        html.Td('1 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.5,rowSpan=6),
-                        html.Td(f'Calidad',rowSpan=6),
+                        html.Td('Calidad',rowSpan=6),
                     ]),
                     html.Tr([
                         html.Td(.5),
-                        html.Td(f'Alta'),
+                        html.Td('Alta'),
                     ]),
                     html.Tr([
                         html.Td(.4),
-                        html.Td(f'Media alta'),
+                        html.Td('Media alta'),
                     ]),
                     html.Tr([
                         html.Td(.3),
-                        html.Td(f'Media'),
+                        html.Td('Media'),
                     ]),
                     html.Tr([
                         html.Td(.2),
-                        html.Td(f'Media baja'),
+                        html.Td('Media baja'),
                     ]),
                     html.Tr([
                         html.Td(.1),
-                        html.Td(f'Baja'),
+                        html.Td('Baja'),
                     ]),
 
 
@@ -2429,51 +2430,51 @@ def criterio_38():
                     html.Tr([
                         html.Td(1,rowSpan=12),
                         html.Td(.5,rowSpan=6),
-                        html.Td(f'Cantidad',rowSpan=6),
+                        html.Td('Cantidad',rowSpan=6),
                     ]),
                     html.Tr([
                         html.Td(.5),
-                        html.Td(f'5 o mas Iniciativas'),
+                        html.Td('5 o mas Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.4),
-                        html.Td(f'4 Iniciativas'),
+                        html.Td('4 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.3),
-                        html.Td(f'3 Iniciativas'),
+                        html.Td('3 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.2),
-                        html.Td(f'2 Iniciativas'),
+                        html.Td('2 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.1),
-                        html.Td(f'1 Iniciativas'),
+                        html.Td('1 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.5,rowSpan=6),
-                        html.Td(f'Calidad',rowSpan=6),
+                        html.Td('Calidad',rowSpan=6),
                     ]),
                     html.Tr([
                         html.Td(.5),
-                        html.Td(f'Alta'),
+                        html.Td('Alta'),
                     ]),
                     html.Tr([
                         html.Td(.4),
-                        html.Td(f'Media alta'),
+                        html.Td('Media alta'),
                     ]),
                     html.Tr([
                         html.Td(.3),
-                        html.Td(f'Media'),
+                        html.Td('Media'),
                     ]),
                     html.Tr([
                         html.Td(.2),
-                        html.Td(f'Media baja'),
+                        html.Td('Media baja'),
                     ]),
                     html.Tr([
                         html.Td(.1),
-                        html.Td(f'Baja'),
+                        html.Td('Baja'),
                     ]),
 
 
@@ -2506,51 +2507,51 @@ def criterio_39():
                     html.Tr([
                         html.Td(6,rowSpan=12),
                         html.Td(3,rowSpan=6),
-                        html.Td(f'Cantidad',rowSpan=6),
+                        html.Td('Cantidad',rowSpan=6),
                     ]),
                     html.Tr([
                         html.Td(3),
-                        html.Td(f'5 o mas Iniciativas'),
+                        html.Td('5 o mas Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(2.4),
-                        html.Td(f'4 Iniciativas'),
+                        html.Td('4 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(1.8),
-                        html.Td(f'3 Iniciativas'),
+                        html.Td('3 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(1.2),
-                        html.Td(f'2 Iniciativas'),
+                        html.Td('2 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(.6),
-                        html.Td(f'1 Iniciativas'),
+                        html.Td('1 Iniciativas'),
                     ]),
                     html.Tr([
                         html.Td(3,rowSpan=6),
-                        html.Td(f'Calidad',rowSpan=6),
+                        html.Td('Calidad',rowSpan=6),
                     ]),
                     html.Tr([
                         html.Td(3),
-                        html.Td(f'Alta'),
+                        html.Td('Alta'),
                     ]),
                     html.Tr([
                         html.Td(2.4),
-                        html.Td(f'Media alta'),
+                        html.Td('Media alta'),
                     ]),
                     html.Tr([
                         html.Td(1.8),
-                        html.Td(f'Media'),
+                        html.Td('Media'),
                     ]),
                     html.Tr([
                         html.Td(1.2),
-                        html.Td(f'Media baja'),
+                        html.Td('Media baja'),
                     ]),
                     html.Tr([
                         html.Td(.6),
-                        html.Td(f'Baja'),
+                        html.Td('Baja'),
                     ]),
 
 

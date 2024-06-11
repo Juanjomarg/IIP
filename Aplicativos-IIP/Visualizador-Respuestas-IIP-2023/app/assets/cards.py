@@ -1,4 +1,5 @@
-from assets.libraries import *
+import dash_bootstrap_components as dbc
+from dash import html
 
 def card_p1_p2(**kwargs):
     return dbc.Card(

@@ -1,8 +1,8 @@
-from assets.libraries import *
-from assets.commons import *
-from assets.cards import *
 
-dash.register_page(__name__, path='/stats')
+import dash_bootstrap_components as dbc
+from dash import register_page, html
+
+register_page(__name__, path='/stats')
 
 layout = dbc.Container([
     dbc.Row([
